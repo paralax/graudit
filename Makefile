@@ -1,5 +1,5 @@
 ###
-# Graudit makefile
+# graudit makefile
 ###
 
 prefix = /usr
@@ -20,10 +20,9 @@ dist: clean signatures manpages $(DISTFILES) test
 	zip -9r graudit-$(VERSION).zip graudit-$(VERSION)
 	cp -rf t/ graudit-$(VERSION)/
 	rm -rf t/test-results/*
-	cp Makefile.in configure graudit-$(VERSION)
 	cp graudit.in.1 graudit-$(VERSION)
 	cp -r signatures/ graudit-$(VERSION)
-	cp -r aux graudit-$(VERSION)
+	cp -r misc graudit-$(VERSION)
 	tar zcf graudit-$(VERSION)_src.tar.gz graudit-$(VERSION)
 	rm -r graudit-$(VERSION)
 
