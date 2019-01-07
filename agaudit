@@ -7,6 +7,10 @@ basedir=$(dirname "$0")
 
 AG=$(which ag)
 
+context="1"
+nocolor=""
+vimlines=""
+
 if [ ! -x "$AG" ]; then
     echo "grep not found!"
     exit 2
@@ -21,7 +25,10 @@ usage() {
 Usage: agaudit [opts] /path/to/scan
 
 OPTIONS
+  -C <num>    number of lines for context (default = 1)
   -d <dbname> database to use or /path/to/file.db (uses default if not specified)
+  -L vim friendly lines
+  -z supress colors
 
   -l lists databases available
   -v prints version number
@@ -30,7 +37,6 @@ EOF
 }
 
 listdb () {
-    banner
 if [ -n "$GRDIR" ] && [ -d "$GRDIR" ]; then
     ls -1 "$GRDIR/*.db"
 fi
@@ -47,22 +53,31 @@ fi
 
 sigdb='default'
 
-while getopts "d:hlv" opt; do
+while getopts "C:d:hLlvz" opt; do
 	case $opt in 
-    d)
-        sigdb="$OPTARG"
-    ;;
+    	C)
+		context="$OPTARG"
+	;;
+    	d)
+        	sigdb="$OPTARG"
+    	;;
 	h) 
 		usage
 		exit 1
+	;;
+	L)
+		vimlines="--vimgrep"
 	;;
 	l)
 		listdb
 		exit 0
 	;;
 	v)
-	    version
-	    exit 0
+	    	version
+	    	exit 0
+	;;
+	z)
+		nocolor="--nocolor"
 	;;
 	\?)
         echo "Invalid option: -$OPTARG" >&2
@@ -86,9 +101,14 @@ else
     database="$sigdb"
 fi
 
-if [ "$sigdb" == "c" ]; then
-	sigdb="cc"
-fi
+case $sigdb in
+	c)
+		sigdb="cc"
+		;;
+	dotnet)
+		sigdb="cs"
+		;;
+esac
 
 shift $((OPTIND-1))
 
@@ -98,9 +118,12 @@ if [ -z "$1" ]; then
 fi
 
 # ag --color-match --java "($(paste -sd "|" signatures/java.db))" t/example.jsp  | head
+	# --color-match \
 $AG \
-	--color-match \
+	-C $context \
 	--$sigdb \
+	$nocolor \
+	$vimlines \
 	"($(paste -sd "|" $database))" \
 	"$@"
 
