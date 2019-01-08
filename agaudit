@@ -28,6 +28,7 @@ OPTIONS
   -C <num>    number of lines for context (default = 1)
   -d <dbname> database to use or /path/to/file.db (uses default if not specified)
   -L vim friendly lines
+  -Z high contrast colors
   -z supress colors
 
   -l lists databases available
@@ -53,7 +54,7 @@ fi
 
 sigdb='default'
 
-while getopts "C:d:hLlvz" opt; do
+while getopts "C:d:hLlvZz" opt; do
 	case $opt in 
     	C)
 		context="$OPTARG"
@@ -75,6 +76,9 @@ while getopts "C:d:hLlvz" opt; do
 	v)
 	    	version
 	    	exit 0
+	;;
+	Z)
+		nocolor="--color"
 	;;
 	z)
 		nocolor="--nocolor"
@@ -117,8 +121,6 @@ if [ -z "$1" ]; then
         exit 2
 fi
 
-# ag --color-match --java "($(paste -sd "|" signatures/java.db))" t/example.jsp  | head
-	# --color-match \
 $AG \
 	-C $context \
 	--$sigdb \
