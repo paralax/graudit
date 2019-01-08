@@ -12,7 +12,7 @@ nocolor=""
 vimlines=""
 
 if [ ! -x "$AG" ]; then
-    echo "grep not found!"
+    echo "ag not found!"
     exit 2
 fi
 
