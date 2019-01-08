@@ -124,7 +124,7 @@ $AG \
 	--$sigdb \
 	$nocolor \
 	$vimlines \
-	"($(paste -sd "|" $database))" \
+	"($(grep -v ^\# $database | paste -sd "|"))" \
 	"$@"
 
 SUCCESS=$?
