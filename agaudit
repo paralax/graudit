@@ -25,7 +25,7 @@ usage() {
 Usage: agaudit [opts] /path/to/scan
 
 OPTIONS
-  -C <num>    number of lines for context (default = 1)
+  -c <num>    number of lines for context (default = 1)
   -d <dbname> database to use or /path/to/file.db (uses default if not specified)
   -L vim friendly lines
   -Z high contrast colors
@@ -54,9 +54,9 @@ fi
 
 sigdb='default'
 
-while getopts "C:d:hLlvZz" opt; do
+while getopts "c:d:hLlvZz" opt; do
 	case $opt in 
-    	C)
+    	c)
 		context="$OPTARG"
 	;;
     	d)
